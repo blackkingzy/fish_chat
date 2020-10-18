@@ -1,5 +1,5 @@
 <template>
-    <div class="z-button-container">
+    <div class="z-button-container" :class="$attrs.class">
         <button
             class="z-button"
             v-bind:class="classObject"
@@ -23,7 +23,10 @@ export default {
     },
     setup(props) {
         const classObject = computed(() => {
-            return { main: props.type && props.type === "main" };
+            return {
+                main: props.type && props.type === "main",
+                new: props.type && props.type === "new",
+            };
         });
 
         return { classObject };
@@ -33,8 +36,12 @@ export default {
 
 <style lang="css" scoped>
 .main {
-    background-color: blue;
+    background-color: #0099ff;
 }
+.new {
+    background-color: orange;
+}
+
 .z-button {
     cursor: pointer;
     text-align: center;

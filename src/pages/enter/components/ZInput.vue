@@ -36,6 +36,7 @@ export default {
     margin-bottom: 2rem;
 }
 input {
+    vertical-align: middle;
     height: 2rem;
     border-radius: 4px;
     border: 2px solid #000000;
@@ -53,15 +54,15 @@ label {
     font-weight: 700;
     text-align: justify;
     display: inline-block;
-    position: absolute;
-    left: -13.5rem;
+    /* position: absolute; */
+    /* left: -13.5rem; */
     /* line-height: 2rem; */
 }
 
-label::after {
+/* label::after {
     display: inline-block;
     width: 100%;
     content: "";
     height: 0;
-}
+} */
 </style>
