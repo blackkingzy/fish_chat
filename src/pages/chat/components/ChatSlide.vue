@@ -1,11 +1,12 @@
 <template>
     <div class="chat_slide">
-        <template v-if="userList.length">
+        <template v-if="store.getters.room_info.users.length">
             <user-info
-                v-for="(user, index) in userList"
+                v-for="(user, index) in store.getters.room_info.users"
                 :key="index"
-                :user_name="user.name"
-                :avatar="user.avatar"
+                :user_name="user.user_name"
+                :user_id="user.user_id"
+                avatar="../../../assets/logo.png"
             ></user-info>
         </template>
     </div>
@@ -14,27 +15,14 @@
 <script>
 import { reactive } from "vue";
 import UserInfo from "./UserInfo.vue";
+import { useStore } from "vuex";
 export default {
     components: {
         UserInfo,
     },
     setup() {
-        const userList = reactive([
-            {
-                name: "王铮",
-                avatar: "../../../assets/logo.png",
-            },
-            {
-                name: "zhangyue",
-                avatar: "../../../assets/logo.png",
-            },
-            {
-                name: "11111111111111111111111111111111111",
-                avatar: "../../../assets/logo.png",
-            },
-        ]);
-
-        return { userList };
+        const store = useStore();
+        return { store };
     },
 };
 </script>

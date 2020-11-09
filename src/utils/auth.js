@@ -2,14 +2,14 @@ import Cookies from 'js-cookie'
 
 const TokenKey = 'chat'
 
-export function getToken() {
-  return Cookies.get(TokenKey)
+export const getToken = () => {
+    return Cookies.get(TokenKey)
 }
 
-export function setToken(token) {
-  return Cookies.set(TokenKey, token)
+export const setToken = (token) => {
+    return Cookies.set(TokenKey, token)
 }
 
-export function removeToken() {
-  return Cookies.remove(TokenKey)
+export const removeToken = () => {
+    return Cookies.remove(TokenKey)
 }

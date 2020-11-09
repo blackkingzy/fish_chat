@@ -1,6 +1,8 @@
 <template>
-    <div class="z-input">
-        <label :for="$attrs.id">{{ $attrs.label }}:</label>
+    <div class="z-input" v-bind:class="classObject">
+        <label :for="$attrs.id" :style="{ width: labelWidth }"
+            >{{ $attrs.label }}:</label
+        >
         <input
             maxlength="24"
             :value="modelValue"
@@ -8,22 +10,39 @@
             ref="ZInput"
             type="text"
             v-bind="$attrs"
+            :style="{ fontSize: type }"
         />
     </div>
 </template>
 
 <script>
+import { computed } from "vue";
 export default {
     inheritAttrs: false,
-    props: ["modelValue"],
+    props: {
+        type: {
+            type: String,
+            default: "default",
+        },
+        labelWidth: {
+            type: String,
+        },
+        modelValue: String,
+    },
     setup(props, context) {
         function onInput(e) {
-            console.log(this);
             context.emit("update:modelValue", e.target.value);
             // 实时校验，通知父组件
             // this.parent.$emit("validate");
         }
-        return { onInput };
+
+        const classObject = computed(() => {
+            return {
+                large: props.type && props.type === "large",
+                medium: props.type && props.type === "medium",
+            };
+        });
+        return { onInput, classObject };
     },
 };
 </script>
@@ -31,12 +50,21 @@ export default {
 <style lang="css" scoped>
 .z-input {
     /* line-height: 2rem; */
-    font-size: 2rem;
     position: relative;
     margin-bottom: 2rem;
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center; */
+}
+.large {
+    font-size: 2rem;
+}
+.medium {
+    font-size: 1.5rem;
 }
 input {
     vertical-align: middle;
+    font-size: large;
     height: 2rem;
     border-radius: 4px;
     border: 2px solid #000000;
@@ -50,7 +78,7 @@ input:focus {
 
 label {
     /* font-size: 2rem; */
-    width: 13rem;
+    color: #000;
     font-weight: 700;
     text-align: justify;
     display: inline-block;

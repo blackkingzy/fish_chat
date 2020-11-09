@@ -5,7 +5,8 @@
                 <message
                     v-for="(msg, index) in msgList"
                     :key="index"
-                    :name="msg.name"
+                    :user_id="msg.user_id"
+                    :user_name="msg.user_name"
                     :message_content="msg.message_content"
                 ></message>
             </template>

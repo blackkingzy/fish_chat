@@ -1,35 +1,50 @@
-import request from "./request"
+import request from './request'
 
-
-const method_data = (httpMethod) => (url, data, onSuccess, onFault, headers) => {
+const method_data = (httpMethod) => (
+    url,
+    data,
+    onSuccess,
+    onFault,
+    headers
+) => {
     return request({
         url: url,
         method: httpMethod,
         data,
-        headers
-    }).then(response => {
-        // handle success
-        onSuccess(response.data)
+        headers,
     })
-        .catch(error => {
+        .then((response) => {
+            // handle success
+            onSuccess(response.data)
+        })
+        .catch((error) => {
             // handle error
             onFault(error)
         })
 }
 
-const method_params = (httpMethod) => (url, params, onSuccess, onFault, headers) => {
+const method_params = (httpMethod) => (
+    url,
+    params,
+    onSuccess,
+    onFault,
+    headers
+) => {
     return request({
         url: url,
         method: httpMethod,
         params,
-        headers
-    }).then(response => {
-        // handle success
-        onSuccess(response.data)
+        headers,
     })
-        .catch(error => {
+        .then((response) => {
+            // handle success
+            onSuccess(response.data)
+            return response.data
+        })
+        .catch((error) => {
             // handle error
             onFault(error)
+            return error
         })
 }
 

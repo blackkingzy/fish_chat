@@ -1,53 +1,44 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import antd from 'ant-design-vue'
+import store from '../store/index.js'
+
 // import store from '../store'
 // import router from '../router'
 // 创建一个create函数，可以动态生成组件实例，并且挂载到body上
 
 // Component:是组件配置对象
 export function create(Component, props) {
-  // 借用vue的构造函数来动态生成这个组件实例
-  const vm = new Vue({
-    // store,
-    // router,
-    render(h) {
-      return h(Component, { props })
+    //dialog实例
+    let dialogInstance = null
+    //创建一个临时div供将来挂载
+    const div = document.createElement('div')
+    div.setAttribute('id', 'dialog')
+    document.body.appendChild(div)
+
+    //声明销毁方法
+    function destroy() {
+        if (dialogInstance && div.parentNode) {
+            console.log('destroy')
+            dialogInstance.unmount(div)
+            div.parentNode.removeChild(div)
+            dialogInstance = null
+        }
     }
-  })
-  // 尽管没有挂载目标，但其vm已经有了$el属性
-  vm.$mount() // 这个函数执行才会执行render函数
 
-  //通过$el属性获得真实dom
-  document.body.appendChild(vm.$el)
-  //组件实例返回
-  const comp = vm.$children[0]
-  // 销毁方法，释放内存
-  comp.remove = () => {
-    document.body.removeChild(vm.$el)
-    comp.$destroy()
-    // vm.$destroy()
-  }
+    // 借用createApp来动态生成这个组件实例
+    dialogInstance = createApp(
+        Component,
+        Object.assign(props, { destroy })
+    ).use(store)
 
-  return comp
+    //要将antd的组件注册给临时创建的app实例,这样新实例才能找到antd中的组件,在这边我只注册对话框组件
+    //总结:注意这里也是实例,与main.js中的相同
+    dialogInstance.use(antd)
+
+    dialogInstance.mount(div) // 这个函数执行才会执行render函数
+
+    return dialogInstance
 }
-// export function create(Component, props) {
-//     // 借用vue的构造函数来动态生成这个组件实例
-//     const Profile = Vue.extend({
-//         render(h) {
-//             return h(Component, { props })
-//         }
-//     })
-//     // 尽管没有挂载目标，但其vm已经有了$el属性
-//     const vm = new Profile().$mount() // 这个函数执行才会执行render函数
 
-//     //通过$el属性获得真实dom
-//     document.body.appendChild(vm.$el)
-//     //组件实例返回
-//     const comp = vm.$children[0]
-//     // 销毁方法，释放内存
-//     comp.remove = () => {
-//         document.body.removeChild(vm.$el)
-//         comp.$destroy
-//     }
-
-//     return comp
-// }
+//待解决问题
+//mount之后在body下产生了俩个div,并且出现了teleport

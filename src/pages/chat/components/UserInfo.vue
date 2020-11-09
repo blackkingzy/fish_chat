@@ -1,8 +1,14 @@
 <template>
     <div class="user">
         <div class="user_avatar">
-            <img src="../../../assets/logo.png" alt="Avatar" />
+            <img
+                v-if="user_id === store.getters.user_info.user_id"
+                src="../../../assets/me.png"
+                alt="Avatar"
+            />
+            <img v-else src="../../../assets/other.png" alt="Avatar" />
         </div>
+
         <div class="user_name" :title="user_name">
             {{ user_name }}
         </div>
@@ -10,18 +16,21 @@
 </template>
 
 <script>
+import { useStore } from 'vuex'
 export default {
     props: {
         avatar: {
             type: String,
-            default: "../../../assets/logo.png",
+            default: '../../../assets/logo.png',
         },
         user_name: String,
+        user_id: String,
     },
     setup() {
-        return {};
+        const store = useStore()
+        return { store }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>
