@@ -30,38 +30,60 @@
 <script>
 import ZInput from '../../components/ZInput.vue'
 import ZButton from '../../components/ZButton.vue'
-import { reactive, watchEffect, ref } from 'vue'
+import { reactive, watchEffect, ref, getCurrentInstance } from 'vue'
 import { router } from '../../router'
 import { get, post } from '../../utils/http'
 import { create } from '../../utils/create'
-import CreateRoom from '../create/index.vue'
+// import CreateRoom from "../create/index.vue";
 import short from 'short-uuid'
 import { setToken } from '../../utils/auth'
 import { useStore } from 'vuex'
+import { validate } from '../../utils/validate.js'
+import CreateRandomRoom from './components/CreateRandomRoom.vue'
 export default {
     components: {
         ZInput,
         ZButton,
     },
     setup() {
+        const {
+            $message,
+        } = getCurrentInstance().appContext.config.globalProperties
         const store = useStore()
 
         const room_No = ref('')
         const user_name = ref('')
         let user_id = ''
 
-        function enterRoom() {
-            console.log('请求进入房间')
-            user_id = short.generate()
-            const user_info = { user_id: user_id, user_name: user_name.value }
-            const data = { room_No: room_No.value, user_info }
-            post('/api/enter', data, successEnter, faultEnter)
+        const rules_enter = {
+            room_No: [
+                { required: true, message: 'Room number cannot be empty' },
+            ],
+            user_name: [
+                { required: true, message: 'Nickname should be filled' },
+            ],
         }
-
-        function createRoom() {
-            create(CreateRoom, {
-                visible: true,
-            })
+        //进入房间模块
+        async function enterRoom() {
+            console.log('请求进入房间')
+            try {
+                await validate(
+                    {
+                        room_No: room_No.value,
+                        user_name: user_name.value,
+                    },
+                    rules_enter
+                )
+                user_id = short.generate()
+                const user_info = {
+                    user_id: user_id,
+                    user_name: user_name.value,
+                }
+                const data = { room_No: room_No.value, user_info }
+                await post('/api/enter', data, successEnter, faultEnter)
+            } catch (error) {
+                $message.error(error.message)
+            }
         }
 
         function successEnter(data) {
@@ -80,8 +102,67 @@ export default {
             router.push({ path: '/chat' })
         }
 
-        function faultEnter(error) {
-            console.log(error)
+        const rules_create = {
+            user_name: [
+                { required: true, message: 'Nickname should be filled' },
+            ],
+        }
+        //创建房间模块
+        async function createRoom() {
+            try {
+                await validate(
+                    {
+                        user_name: user_name.value,
+                    },
+                    rules_enter
+                )
+                user_id = short.generate()
+                const user_info = {
+                    user_id: user_id,
+                    user_name: user_name.value,
+                }
+                const data = { room_No: room_No.value, user_info }
+                //如果自己输入了room_No
+                if (room_No.value) {
+                    user_id = short.generate()
+                    const user_info = {
+                        user_id: user_id,
+                        user_name: user_name.value,
+                    }
+                    const data = { room_No: room_No.value, user_info }
+                    await post('/api/create', data, successCreate, fault)
+                } else {
+                    create(CreateRandomRoom, {
+                        visible: true,
+                        params: data,
+                        success: successCreate,
+                        fault: fault,
+                    })
+                }
+            } catch (error) {
+                $message.error(error.message)
+            }
+            // create(CreateRoom, {
+            //     visible: true,
+            // });
+            function successCreate(data) {
+                const params = {
+                    user_info: {
+                        user_id: user_id,
+                        user_name: user_name.value,
+                    },
+                    room_No: data.room_No,
+                    room_info: data.room_info,
+                }
+
+                store.dispatch('successEnter', params)
+                setToken(data.token)
+                router.push({ path: '/chat' })
+            }
+            //通用的错误回调函数
+            function fault(error) {
+                $message.error(error.message)
+            }
         }
 
         const test = ref(0)

@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { getToken } from '../utils/auth.js'
-import { get } from '../utils/http.js'
+import { get_special } from '../utils/http.js'
 import store from '../store/index.js'
+import { message } from 'ant-design-vue';
+import { removeToken } from "../utils/auth"
 
 import enter from '../pages/enter/index.vue'
 import chat from '../pages/chat/index.vue'
@@ -29,14 +31,7 @@ router.beforeEach(async (to, from, next) => {
         } else {
             try {
                 //请求重新进入房间的接口
-                const data = await get(
-                    'api/info',
-                    {},
-                    (data) => {},
-                    (error) => {
-                        console.log(error)
-                    }
-                )
+                const data = await get_special('api/info')
                 console.log('api/info', data)
                 const params = {
                     user_info: data.user_info,
@@ -46,7 +41,10 @@ router.beforeEach(async (to, from, next) => {
                 store.dispatch('successEnter', params)
                 next()
             } catch (error) {
-                //这里要做代码补全
+                removeToken()
+                //根据具体错误做出提示
+                message.error(error.message);
+                next({ path: '/' })
             }
         }
     } else {

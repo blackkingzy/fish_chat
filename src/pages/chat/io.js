@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
+import { getToken } from "../../utils/auth.js"
 
 export const useIo = (url, { $message, spinning, messageList }) => {
     const router = useRouter()
@@ -11,6 +12,7 @@ export const useIo = (url, { $message, spinning, messageList }) => {
         query: {
             user_id: store.getters.user_id,
             room_No: store.getters.room_No,
+            token: getToken()
         },
     });
 
@@ -43,12 +45,19 @@ export const useIo = (url, { $message, spinning, messageList }) => {
         console.log("reason", reason);
         console.log("disconnect");
     });
-    // 连接错误
+    // 连接错误-仅仅是连接时候的错误
     socket.on("error", (error) => {
         //连接错误,回到首页
-        // quitRoom();
-        store.dispatch('quitRoom')
         router.push({ path: "/" });
+        $message.error(error.message);
+        console.log("error", error);
+    });
+
+    //token过期
+    socket.on("tokenExpired", (error) => {
+        console.log('tokenExpired');
+        router.push({ path: "/" });
+        $message.error(error.message);
         console.log("error", error);
     });
 

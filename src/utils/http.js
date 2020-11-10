@@ -1,6 +1,6 @@
 import request from './request'
 
-const method_data = (httpMethod) => (
+const method = (httpMethod, special) => (
     url,
     data,
     onSuccess,
@@ -10,45 +10,25 @@ const method_data = (httpMethod) => (
     return request({
         url: url,
         method: httpMethod,
-        data,
+        [httpMethod === 'post' ? 'data' : 'params']: data,
         headers,
     })
         .then((response) => {
             // handle success
-            onSuccess(response.data)
+            onSuccess ? onSuccess(response) : ''
+            return response
         })
         .catch((error) => {
             // handle error
-            onFault(error)
+            onFault ? onFault(error) : ''
+            if (special) {
+                return Promise.reject(new Error(error.message || 'Error'))
+            }
         })
 }
 
-const method_params = (httpMethod) => (
-    url,
-    params,
-    onSuccess,
-    onFault,
-    headers
-) => {
-    return request({
-        url: url,
-        method: httpMethod,
-        params,
-        headers,
-    })
-        .then((response) => {
-            // handle success
-            onSuccess(response.data)
-            return response.data
-        })
-        .catch((error) => {
-            // handle error
-            onFault(error)
-            return error
-        })
-}
-
-export const get = method_params('get')
-export const post = method_data('post')
-export const put = method_params('put')
-export const del = method_params('delete')
+export const get_special = method('get', true)
+export const get = method('get')
+export const post = method('post')
+export const put = method('put')
+export const del = method('delete')
