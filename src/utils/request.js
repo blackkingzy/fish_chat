@@ -1,7 +1,7 @@
 import axios from 'axios'
 import store from '../store/index.js'
 import { router } from '../router/index.js'
-import { getToken, removeToken } from '../utils/auth'
+import { getCookie, removeCookie } from './cookie'
 
 // create an axios instance
 const service = axios.create({
@@ -15,11 +15,11 @@ const service = axios.create({
 service.interceptors.request.use(
     (config) => {
         // do something before request is sent
-        if (getToken()) {
+        if (getCookie('token')) {
             // let each request carry token
             // ['X-Token'] is a custom headers key
             // please modify it according to the actual situation
-            config.headers.Authorization = getToken()
+            config.headers.Authorization = getCookie('token')
         }
         return config
     },
@@ -53,7 +53,7 @@ service.interceptors.response.use(
             //     // to path:/
             //     // const isRefresh = store.getters.room_No
             //     // 切记，如果是刷新，只需要清空token，其它值因为刷新自然就清空了
-            //     removeToken()
+            //     removeCookie('token')
             // }
             return Promise.reject(new Error(res.error || 'Error'))
         } else {

@@ -1,13 +1,14 @@
 <template>
     <a-modal
         v-model:visible="dialogVisible"
-        okText="confirm"
-        title="Leave room"
+        :okText="t('label.global.L003')"
+        :cancelText="t('label.global.L004')"
+        :title="t('label.chat.L003')"
         @ok="leaveRoom"
         centered
         :afterClose="destroy"
     >
-        你确定要离开该房间吗?
+        {{ t("message.chat.M001") }}
     </a-modal>
 </template>
 
@@ -15,11 +16,12 @@
 import { ref, getCurrentInstance } from "vue";
 import { get } from "../../../utils/http";
 import { router } from "../../../router";
-
+import { useI18n } from "vue-i18n";
 export default {
     props: ["visible", "destroy"],
     setup(props, content) {
         const dialogVisible = ref(props.visible);
+        const { t } = useI18n();
 
         function leaveRoom() {
             router.push({ path: "/" });
@@ -29,6 +31,7 @@ export default {
         return {
             dialogVisible,
             leaveRoom,
+            t,
         };
     },
 };

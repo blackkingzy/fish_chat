@@ -6,7 +6,6 @@
                 :key="index"
                 :user_name="user.user_name"
                 :user_id="user.user_id"
-                avatar="../../../assets/logo.png"
             ></user-info>
         </template>
     </div>

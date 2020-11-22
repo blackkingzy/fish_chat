@@ -28,6 +28,9 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.z-textarea {
+    height: 100%;
+}
 textarea {
     resize: none;
     box-sizing: border-box;
@@ -35,7 +38,7 @@ textarea {
     width: 100%;
     font-family: sans-serif;
     border: 1px solid #ebeef5;
-    transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 textarea:focus {
     outline: none;

@@ -3,26 +3,24 @@
         <z-input
             id="room"
             v-model="room_No"
-            label="请输入房间号"
-            placeholder="Please enter the room NO"
+            :label="t('label.enter.L003')"
             type="large"
             labelWidth="7em"
         ></z-input>
         <z-input
             id="user_name"
             v-model="user_name"
-            label="请输入昵称"
-            placeholder="Please enter the name"
+            :label="t('label.enter.L004')"
             type="large"
             labelWidth="7em"
         ></z-input>
         <div class="enter_button">
-            <z-button @click="createRoom" type="new" class="create_button"
-                >create</z-button
-            >
-            <z-button @click="enterRoom" type="main" class="create_button"
-                >Enter</z-button
-            >
+            <z-button @click="createRoom" type="new" class="create_button">{{
+                t('label.enter.L001')
+            }}</z-button>
+            <z-button @click="enterRoom" type="main" class="create_button">{{
+                t('label.enter.L002')
+            }}</z-button>
         </div>
     </div>
 </template>
@@ -36,10 +34,13 @@ import { get, post } from '../../utils/http'
 import { create } from '../../utils/create'
 // import CreateRoom from "../create/index.vue";
 import short from 'short-uuid'
-import { setToken } from '../../utils/auth'
+import { setCookie } from '../../utils/cookie.js'
 import { useStore } from 'vuex'
 import { validate } from '../../utils/validate.js'
 import CreateRandomRoom from './components/CreateRandomRoom.vue'
+import { useI18n } from 'vue-i18n'
+import { useRules } from './rules.js'
+
 export default {
     components: {
         ZInput,
@@ -50,19 +51,12 @@ export default {
             $message,
         } = getCurrentInstance().appContext.config.globalProperties
         const store = useStore()
+        const { t, locale } = useI18n()
 
         const room_No = ref('')
         const user_name = ref('')
         let user_id = ''
 
-        const rules_enter = {
-            room_No: [
-                { required: true, message: 'Room number cannot be empty' },
-            ],
-            user_name: [
-                { required: true, message: 'Nickname should be filled' },
-            ],
-        }
         //进入房间模块
         async function enterRoom() {
             console.log('请求进入房间')
@@ -72,7 +66,7 @@ export default {
                         room_No: room_No.value,
                         user_name: user_name.value,
                     },
-                    rules_enter
+                    useRules(locale, t, 'enter')
                 )
                 user_id = short.generate()
                 const user_info = {
@@ -80,10 +74,14 @@ export default {
                     user_name: user_name.value,
                 }
                 const data = { room_No: room_No.value, user_info }
-                await post('/api/enter', data, successEnter, faultEnter)
+                await post('/api/enter', data, successEnter, fault)
             } catch (error) {
                 $message.error(error.message)
             }
+        }
+        //通用的错误回调函数
+        function fault(error) {
+            $message.error(error.message)
         }
 
         function successEnter(data) {
@@ -98,15 +96,10 @@ export default {
                 room_info: data.room_info,
             }
             store.dispatch('successEnter', params)
-            setToken(data.token)
+            setCookie('token', data.token)
             router.push({ path: '/chat' })
         }
 
-        const rules_create = {
-            user_name: [
-                { required: true, message: 'Nickname should be filled' },
-            ],
-        }
         //创建房间模块
         async function createRoom() {
             try {
@@ -114,7 +107,7 @@ export default {
                     {
                         user_name: user_name.value,
                     },
-                    rules_enter
+                    useRules(locale, t)
                 )
                 user_id = short.generate()
                 const user_info = {
@@ -142,9 +135,7 @@ export default {
             } catch (error) {
                 $message.error(error.message)
             }
-            // create(CreateRoom, {
-            //     visible: true,
-            // });
+
             function successCreate(data) {
                 const params = {
                     user_info: {
@@ -156,21 +147,21 @@ export default {
                 }
 
                 store.dispatch('successEnter', params)
-                setToken(data.token)
+                setCookie('token', data.token)
                 router.push({ path: '/chat' })
             }
             //通用的错误回调函数
-            function fault(error) {
-                $message.error(error.message)
-            }
+            // function fault(error) {
+            //     $message.error(error.message)
+            // }
         }
 
-        const test = ref(0)
-        watchEffect(() => {
-            console.log(`${test.value}hook`)
-        })
+        // const test = ref(0)
+        // watchEffect(() => {
+        //     console.log(`${test.value}hook`)
+        // })
 
-        return { room_No, user_name, createRoom, enterRoom }
+        return { room_No, user_name, createRoom, enterRoom, t }
     },
 }
 </script>
@@ -192,7 +183,7 @@ export default {
 }
 .enter_button,
 .create_button {
-    flex-grow: 1;
+    flex: 1;
 }
 
 .select_avator span:first-child {

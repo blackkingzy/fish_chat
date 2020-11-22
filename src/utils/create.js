@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import antd from 'ant-design-vue'
 import store from '../store/index.js'
+import i18n from '../i18n/index.js'
 
 // import store from '../store'
 // import router from '../router'
@@ -29,7 +30,7 @@ export function create(Component, props) {
     dialogInstance = createApp(
         Component,
         Object.assign(props, { destroy })
-    ).use(store)
+    ).use(store).use(i18n)
 
     //要将antd的组件注册给临时创建的app实例,这样新实例才能找到antd中的组件,在这边我只注册对话框组件
     //总结:注意这里也是实例,与main.js中的相同

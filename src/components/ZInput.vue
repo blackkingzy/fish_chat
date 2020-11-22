@@ -1,7 +1,7 @@
 <template>
     <div class="z-input" v-bind:class="classObject">
         <label :for="$attrs.id" :style="{ width: labelWidth }"
-            >{{ $attrs.label }}:</label
+            >{{ label }}:</label
         >
         <input
             maxlength="24"
@@ -28,6 +28,7 @@ export default {
             type: String,
         },
         modelValue: String,
+        label: String,
     },
     setup(props, context) {
         function onInput(e) {

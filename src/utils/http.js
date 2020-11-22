@@ -1,6 +1,6 @@
 import request from './request'
 
-const method = (httpMethod, special) => (
+const method = (httpMethod, async) => (
     url,
     data,
     onSuccess,
@@ -21,13 +21,13 @@ const method = (httpMethod, special) => (
         .catch((error) => {
             // handle error
             onFault ? onFault(error) : ''
-            if (special) {
+            if (async) {
                 return Promise.reject(new Error(error.message || 'Error'))
             }
         })
 }
 
-export const get_special = method('get', true)
+export const get_async = method('get', true)
 export const get = method('get')
 export const post = method('post')
 export const put = method('put')

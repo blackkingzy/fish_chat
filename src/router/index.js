@@ -1,29 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken } from '../utils/auth.js'
-import { get_special } from '../utils/http.js'
+import { getCookie } from '../utils/cookie.js'
+import { get_async } from '../utils/http.js'
 import store from '../store/index.js'
-import { message } from 'ant-design-vue';
-import { removeToken } from "../utils/auth"
+import { message } from 'ant-design-vue'
+import { removeCookie } from '../utils/cookie'
 
+import layout from '../layout/index.vue'
 import enter from '../pages/enter/index.vue'
 import chat from '../pages/chat/index.vue'
+import error from '../pages/404/index.vue'
 
 const routes = [
-    { path: '/', component: enter },
-    { path: '/chat', component: chat },
+    {
+        path: '/',
+        component: layout,
+        redirect: '/enter',
+        children: [
+            {
+                path: 'enter',
+                component: enter,
+            },
+            {
+                path: 'chat',
+                component: chat,
+            },
+        ],
+    },
+    { path: '/404', component: error },
 ]
+// const routes = [
+//     { path: '/', component: enter },
+//     { path: '/chat', component: chat },
+//     { path: '/404', component: error },
+// ]
 const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHistory(),
     routes, // short for `routes: routes`
 })
 
+const whiteList = ['/', '/enter', '/404']
+
 router.beforeEach(async (to, from, next) => {
+    //注意:path '/'直接redirect 到'/enter',该beforeEach方法直接略过了匹配path '/',这应该是vue-router的规则
+    console.log(to, from)
     //获取token,没有token直接到首页
     //有token,判断是不是刷新，如果是刷新，请求接口去获取用户信息等等
-    if (getToken()) {
+    if (getCookie('token')) {
         //关闭页面重新进入
-        if (to.path === '/') {
+        if (whiteList.indexOf(to.path) !== -1) {
             next({ path: '/chat' })
         } else if (store.getters.room_No) {
             //判断是不是刷新
@@ -31,7 +56,7 @@ router.beforeEach(async (to, from, next) => {
         } else {
             try {
                 //请求重新进入房间的接口
-                const data = await get_special('api/info')
+                const data = await get_async('api/info')
                 console.log('api/info', data)
                 const params = {
                     user_info: data.user_info,
@@ -41,17 +66,17 @@ router.beforeEach(async (to, from, next) => {
                 store.dispatch('successEnter', params)
                 next()
             } catch (error) {
-                removeToken()
+                removeCookie('token')
                 //根据具体错误做出提示
-                message.error(error.message);
-                next({ path: '/' })
+                message.error(error.message)
+                next({ path: '/enter' })
             }
         }
     } else {
-        if (to.path === '/') {
+        if (whiteList.indexOf(to.path) !== -1) {
             next()
         } else {
-            next({ path: '/' })
+            next(`/enter?redirect=${to.path}`)
         }
     }
 })
