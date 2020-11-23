@@ -24,22 +24,23 @@ const routes = [
                 path: 'chat',
                 component: chat,
             },
+            {
+                path: '/:error',
+                redirect: '/404',
+            },
         ],
     },
+    // 404 page must be placed at the end !!!
     { path: '/404', component: error },
 ]
-// const routes = [
-//     { path: '/', component: enter },
-//     { path: '/chat', component: chat },
-//     { path: '/404', component: error },
-// ]
+
 const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
     history: createWebHistory(),
     routes, // short for `routes: routes`
 })
 
-const whiteList = ['/', '/enter', '/404']
+const whiteList = ['/', '/enter']
 
 router.beforeEach(async (to, from, next) => {
     //注意:path '/'直接redirect 到'/enter',该beforeEach方法直接略过了匹配path '/',这应该是vue-router的规则
@@ -50,6 +51,8 @@ router.beforeEach(async (to, from, next) => {
         //关闭页面重新进入
         if (whiteList.indexOf(to.path) !== -1) {
             next({ path: '/chat' })
+        } else if (to.path === '/404') {
+            next()
         } else if (store.getters.room_No) {
             //判断是不是刷新
             next()
