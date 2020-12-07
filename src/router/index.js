@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getCookie } from '../utils/cookie.js'
-import { get_async } from '../utils/http.js'
+import { get } from '../utils/http.js'
 import store from '../store/index.js'
 import { message } from 'ant-design-vue'
-import { removeCookie } from '../utils/cookie'
+import { removeCookie, getCookie } from '../utils/cookie'
 
 import layout from '../layout/index.vue'
 import enter from '../pages/enter/index.vue'
@@ -25,13 +24,17 @@ const routes = [
                 component: chat,
             },
             {
+                path: '404',
+                component: error,
+            },
+            {
                 path: '/:error',
                 redirect: '/404',
             },
         ],
     },
     // 404 page must be placed at the end !!!
-    { path: '/404', component: error },
+    // { path: '/404', component: error },
 ]
 
 const router = createRouter({
@@ -59,7 +62,7 @@ router.beforeEach(async (to, from, next) => {
         } else {
             try {
                 //请求重新进入房间的接口
-                const data = await get_async('api/info')
+                const data = await get('api/info')
                 console.log('api/info', data)
                 const params = {
                     user_info: data.user_info,
@@ -79,7 +82,8 @@ router.beforeEach(async (to, from, next) => {
         if (whiteList.indexOf(to.path) !== -1) {
             next()
         } else {
-            next(`/enter?redirect=${to.path}`)
+            // next(`/enter?redirect=${to.path}`)
+            next()
         }
     }
 })

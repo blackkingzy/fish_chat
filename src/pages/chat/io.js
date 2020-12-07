@@ -5,15 +5,15 @@ import { getCookie } from '../../utils/cookie.js'
 import { useI18n } from 'vue-i18n'
 import Constants from './constants'
 
-export const useIo = (url, { $message, spinning, messageList }) => {
+export const useIo = (url, { $message, spinning }) => {
     const router = useRouter()
     const store = useStore()
     const { t } = useI18n()
+    console.log(getCookie('io'))
     //建立连接
     const socket = io(url, {
         reconnectionDelayMax: 30000,
         query: {
-            user_id: store.getters.user_id,
             room_No: store.getters.room_No,
             token: getCookie('token'),
         },
@@ -28,7 +28,7 @@ export const useIo = (url, { $message, spinning, messageList }) => {
     //接受消息
     socket.on(Constants.EVENT_TYPE.ACCEPT, (msg) => {
         console.log('accept')
-        messageList.push({ ...msg })
+        store.commit('ADD_MSG', msg)
     })
 
     //新用户进入房间
@@ -47,7 +47,7 @@ export const useIo = (url, { $message, spinning, messageList }) => {
     })
     //断开连接
     socket.on(Constants.EVENT_TYPE.DISCONNECT, (reason) => {
-    //服务器断开后,前台需要对应返回之前页
+        //服务器断开后,前台需要对应返回之前页
         if (reason !== 'io client disconnect') {
             router.push({ path: '/' })
             $message.error(reason)

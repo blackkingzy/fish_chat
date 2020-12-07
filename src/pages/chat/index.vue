@@ -19,7 +19,9 @@
             <div class="chat_body">
                 <chat-slide></chat-slide>
                 <div class="chat_main">
-                    <chat-content :msgList="messageList"></chat-content>
+                    <chat-content
+                        :msgList="store.getters.chat_history"
+                    ></chat-content>
                     <div class="zhangyue">
                         <div class="function_bar">
                             <Emoji @addEmoji="addEmoji"></Emoji>
@@ -55,7 +57,7 @@ import LeaveRoom from './components/LeaveRoom.vue'
 import Emoji from './components/Emoji.vue'
 import { reactive, ref, watchEffect } from 'vue'
 import { isEmpty } from '../../utils/index.js'
-import { get, post } from '../../utils/http'
+import { get, post, del } from '../../utils/http'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { create } from '../../utils/create'
 import { router } from '../../router/index.js'
@@ -83,31 +85,35 @@ export default {
         const { t } = useI18n()
 
         const msgValue = ref('')
-        const messageList = reactive([
-            {
-                user_id: '123456',
-                user_name: 'zhangsan',
-                message_content:
-                    'n9999999999999999999999999999999999999999999999999999999999999999999999999999',
-            },
-            {
-                user_id: '123954',
-                user_name: 'zhangyue',
-                message_content:
-                    '66666666666666666666666666666666666666666666666666666666666666666666666666666',
-            },
-        ])
+        // const messageList = reactive([
+        //     {
+        //         user_id: '123456',
+        //         user_name: 'zhangsan',
+        //         message_content:
+        //             'n9999999999999999999999999999999999999999999999999999999999999999999999999999',
+        //     },
+        //     {
+        //         user_id: '123954',
+        //         user_name: 'zhangyue',
+        //         message_content:
+        //             '66666666666666666666666666666666666666666666666666666666666666666666666666666',
+        //     },
+        // ])
         // watchEffect(() => {
         //     console.log(msgValue.value);
         // });
         const socket = useIo('localhost:3010', {
             $message,
             spinning,
-            messageList,
         })
         //只要离开当前页面就算离开房间
-        onBeforeRouteLeave((to, from, next) => {
+        onBeforeRouteLeave(async (to, from, next) => {
             console.log('我要离开该房间')
+            try {
+                await del('api/quit')
+            } catch (error) {
+                console.log('quit', error)
+            }
             store.dispatch('quitRoom', { t })
             socket.close()
             next()
@@ -123,7 +129,7 @@ export default {
                 user_name: store.getters.user_info.user_name,
                 message_content: msgValue.value,
             }
-            messageList.push(msg)
+            store.getters.chat_history.push(msg)
             socket.emit('send', msg)
             msgValue.value = ''
         }
@@ -142,7 +148,6 @@ export default {
         return {
             store,
             sendMessage,
-            messageList,
             msgValue,
             spinning,
             leaveRoom,
@@ -158,6 +163,7 @@ export default {
     border-radius: 4px;
     border: 1px solid #ebeef5;
     box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255);
 }
 .chat_body {
     margin: auto;

@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import { removeCookie } from '../utils/cookie'
+import { removeCookie, setCookie } from '../utils/cookie'
 import { message } from 'ant-design-vue'
 
 //用户信息
@@ -16,6 +16,7 @@ const getDefaultRoomInfo = () => {
         room_No: '',
         users: [],
         user_count: 0,
+        chat_history: [],
     }
 }
 
@@ -36,6 +37,7 @@ export default Vuex.createStore({
         user_info: (state) => state.user_info,
         room_No: (state) => state.room_info.room_No,
         room_info: (state) => state.room_info,
+        chat_history: (state) => state.room_info.chat_history,
     },
 
     mutations: {
@@ -61,10 +63,12 @@ export default Vuex.createStore({
             state.room_info.users.push(user)
             state.room_info.user_count += 1
         },
-        // REDUCE_USER: (state, index) => {
-        //     state.room_info.users.splice(index, 1)
-        //     state.room_info.user_count -= 1
-        // },
+        SET_HISTORY: (state, history) => {
+            state.room_info.chat_history = history
+        },
+        ADD_MSG: (state, msg) => {
+            state.room_info.chat_history.push(msg)
+        },
     },
     actions: {
         successEnter: ({ commit }, { user_info, room_info, room_No }) => {
@@ -73,6 +77,8 @@ export default Vuex.createStore({
             commit('SET_USER_COUNT', room_info.user_count)
             commit('SET_USER_ID', user_info.user_id)
             commit('SET_USER_NAME', user_info.user_name)
+            commit('SET_HISTORY', room_info.chat_history)
+            setCookie('room_no', room_No)
         },
         otherUserQuitRoom: ({ state, commit }, room_info) => {
             commit('SET_USERS', room_info.users)
@@ -85,6 +91,8 @@ export default Vuex.createStore({
             // message.info(`Exited room ${state.room_info.room_No}`);
             commit('RESET_STATE')
             removeCookie('token')
+            removeCookie('room_no')
+            removeCookie('io')
         },
     },
 })
