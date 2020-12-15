@@ -1,58 +1,136 @@
 <template>
-    <div class="chat_scoll" ref="chat_scoll" @scroll="scrollListener">
-        <div class="chat_content" ref="chat_content">
-            <template v-if="msgList.length">
-                <message
-                    v-for="(msg, index) in msgList"
-                    :key="index"
-                    :user_id="msg.user_id"
-                    :user_name="msg.user_name"
-                    :message_content="msg.message_content"
-                ></message>
-            </template>
+    <div class="chat_scroll" ref="chat_scroll" @scroll="scrollListener">
+        <div
+            class="chat_content"
+            ref="chat_content"
+            :style="{ height: listHeight }"
+        >
+            <div
+                class="chat_msg_list"
+                ref="msg_list_dom"
+                :style="{ transform: getTransform }"
+            >
+                <template v-if="visibleData.length">
+                    <message
+                        v-for="(msg, index) in visibleData"
+                        :key="index"
+                        :user_id="msg.user_id"
+                        :user_name="msg.user_name"
+                        :message_content="msg.message_content"
+                    ></message>
+                </template>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
-import Message from "./Message.vue";
+import {
+    computed,
+    onMounted,
+    reactive,
+    ref,
+    watch,
+    watchEffect,
+    nextTick,
+} from 'vue'
+import Message from './Message.vue'
 export default {
     components: {
         Message,
     },
-    props: ["msgList"],
-    setup() {
-        const chat_scoll = ref(null);
-        const chat_content = ref(null);
+    props: ['msgList'],
+    setup(props) {
+        const chat_scroll = ref(null)
+        const chat_content = ref(null)
+
+        const startIndex = ref(0)
+        const endIndex = ref(startIndex.value + 7)
+        const startOffset = ref(0)
+        const msg_list_dom = ref(null)
+
         onMounted(() => {
-            // console.log(chat_scoll.value.scrollTopMax);
+            // console.log(chat_scroll.value.scrollTopMax);
             // console.log(chat_content.value.offsetHeight);
             // console.log(chat_content.value.offsetHeight);
-        });
+            msg_list_dom.value.scrollIntoView(false)
+            console.log(chat_scroll.value.scrollTop, 'mounted')
+            console.log(chat_scroll.value.scrollHeight, 'mounted')
+            chat_scroll.value.scrollTop = chat_scroll.value.scrollHeight
+            console.log(chat_scroll.value.scrollTop, 'mountedafter')
+        })
+        const listHeight = computed(() => {
+            return `${props.msgList.length * 67}px`
+        })
+        const getTransform = computed(() => {
+            return `translate3d(0,${startOffset.value}px,0)`
+        })
+
+        const visibleData = computed(() => {
+            console.log('computed')
+            //这里未来可以优化
+            return props.msgList.slice(
+                startIndex.value,
+                Math.min(endIndex.value, props.msgList.length)
+            )
+        })
+
+        // watch(props.msgList, () => {});
+        watch(props.msgList, (newValue, oldValue) => {
+            //当添加msg时,始终让滚动条在最下面,注意这里,在代码获取scrollTop时,需要用nextTick
+            nextTick(() => {
+                console.log(chat_scroll.value.scrollTop, 'watch')
+                console.log(chat_scroll.value.scrollHeight, 'watch')
+                chat_scroll.value.scrollTop = chat_scroll.value.scrollHeight
+                console.log(chat_scroll.value.scrollTop, 'watchafter')
+            })
+        })
+
+        // watchEffect(() => {
+        //     console.log("watchEffect");
+        //     console.log(startIndex.value, endIndex.value);
+        //     visibleData = props.msgList.slice(
+        //         startIndex.value,
+        //         Math.min(endIndex.value, props.msgList.length)
+        //     );
+        //     console.log(visibleData);
+        // });
         const scrollListener = () => {
-            // chat_scoll.value.scrollTop = chat_scoll.value.scrollHeight
-            console.log(chat_scoll.value.scrollHeight);
-            console.log(chat_scoll.value.scrollTop)
-            // chat_scoll.value.scroll = 0;
-            // console.log(chat_scoll.value.scrollTop)
+            //修改scrollTop的值相当于此事件执行了一次
+            console.log('scroll')
+            console.log(chat_scroll.value.scrollTop, 'scroll')
+            console.log(chat_scroll.value.scrollHeight, 'scroll')
+            const scrollTop = chat_scroll.value.scrollTop
+            startIndex.value = Math.floor(chat_scroll.value.scrollTop / 67)
+            endIndex.value = startIndex.value + 7
+            startOffset.value = scrollTop - (scrollTop % 67)
+            // chat_scroll.value.scroll = 0;
+            // console.log(chat_scroll.value.scrollTop)
             // console.log(
             //     "scrollListener",
-            //     chat_content.value.offsetHeight / chat_scoll.value.scrollTop
+            //     chat_content.value.offsetHeight / chat_scroll.value.scrollTop
             // );
-        };
+        }
 
-        return { chat_scoll, chat_content, scrollListener };
+        return {
+            chat_scroll,
+            chat_content,
+            scrollListener,
+            visibleData,
+            listHeight,
+            getTransform,
+            msg_list_dom,
+        }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>
-.chat_scoll {
+.chat_scroll {
     overflow-y: auto;
     overflow-x: hidden;
 }
-/* .chat_scoll::-webkit-scrollbar {
+/* .chat_scroll::-webkit-scrollbar {
     display: none;
 } */
 </style>
