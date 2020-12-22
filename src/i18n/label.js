@@ -20,6 +20,12 @@ export const label_cn = {
         L005: '在线人数',
         L006: '选择表情',
     },
+    drawer: {
+        L001: '房间信息',
+    },
+    note: {
+        L001: '提示',
+    },
 }
 
 export const label_en = {
@@ -43,5 +49,11 @@ export const label_en = {
         L004: 'No',
         L005: 'Online',
         L006: 'choose emoji',
+    },
+    drawer: {
+        L001: 'room info',
+    },
+    note: {
+        L001: 'tips',
     },
 }

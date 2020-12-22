@@ -1,26 +1,43 @@
 <template>
-    <div class="dialog_wrapper" v-if="isShow" @click="handleClose">
-        <div class="dialog">
-            <div class="dialog_header"><button class="Close">123</button></div>
-            <div class="dialog_main"></div>
-            <div class="dialog_footer"></div>
-        </div>
-    </div>
+    <a-modal
+        v-model:visible="dialogVisible"
+        :okText="okText"
+        :cancelText="cancelText"
+        :title="title"
+        centered
+        :afterClose="close"
+        :footer="footer"
+        @ok="ok"
+    >
+        <slot name="default"></slot>
+    </a-modal>
 </template>
 
 <script>
+import { ref } from 'vue'
 export default {
     //destroy是create传下来为了在关闭dialog是将页面在内存中销毁
-    props: ["isShow", "close", "destroy"],
-    setup(props, content) {
-        function handleClose() {
-            content.emit("update:isShow", false);
-            props.close();
-            props.destroy();
+    props: ['isShow', 'okText', 'cancelText', 'title', 'footer'],
+    data() {
+        return {
+            dialogVisible: this.isShow,
         }
-        return { handleClose };
     },
-};
+    methods: {
+        close() {
+            this.$emit('update:isShow', false)
+        },
+        ok() {
+            this.dialogVisible = false
+        },
+    },
+    //在setup中,永远记住props中,除了引用类型(reactive([]),reactive({})或者ref([]),ref({})),其它类型的值父组件改变子组件中都监听不到
+    watch: {
+        isShow(newValue, oldValue) {
+            this.dialogVisible = newValue
+        },
+    },
+}
 </script>
 
 <style lang="css" scoped>
@@ -37,7 +54,7 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.dialog{
+.dialog {
     width: 300px;
     height: 300px;
     background: #fff;

@@ -1,15 +1,13 @@
 <template>
     <div class="select_language">
-        <div>
-            <a-radio-group v-model:value="locale">
-                <a-radio value="cn">
-                    {{ t('label.global.L001') }}
-                </a-radio>
-                <a-radio value="en">
-                    {{ t('label.global.L002') }}
-                </a-radio>
-            </a-radio-group>
-        </div>
+        <a-radio-group v-model:value="locale">
+            <a-radio value="cn">
+                {{ t('label.global.L001') }}
+            </a-radio>
+            <a-radio value="en">
+                {{ t('label.global.L002') }}
+            </a-radio>
+        </a-radio-group>
     </div>
 </template>
 
@@ -22,7 +20,6 @@ export default {
         const { t, locale } = useI18n()
         //这里以后要修改成从cookie中获取
 
-        
         watchEffect(() => {
             setCookie('lang', locale.value)
         })
@@ -37,10 +34,9 @@ export default {
 
 <style lang="css" scoped>
 .select_language {
-    width: 16rem;
-    position: fixed;
-    top: 2.4rem;
-    right: 6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .select_language >>> .ant-select-selection {
     border: none;

@@ -13,7 +13,6 @@ export function create(Component, props) {
     let dialogInstance = null
     //创建一个临时div供将来挂载
     const div = document.createElement('div')
-    div.setAttribute('id', 'dialog')
     document.body.appendChild(div)
 
     //声明销毁方法
