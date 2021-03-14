@@ -8,9 +8,9 @@
             :value="modelValue"
             @input="onInput"
             ref="ZInput"
-            type="text"
+            :type="type"
             v-bind="$attrs"
-            :style="{ fontSize: type }"
+            :style="{ fontSize: size }"
         />
     </div>
 </template>
@@ -22,6 +22,10 @@ export default {
     props: {
         type: {
             type: String,
+            default: "text",
+        },
+        size: {
+            type: String,
             default: "default",
         },
         labelWidth: {
@@ -32,6 +36,8 @@ export default {
     },
     setup(props, context) {
         function onInput(e) {
+            //去除空格,这样写其实本质上空格输入了,但紧接着被替换了
+            e.target.value = e.target.value.replace(/\s+/g, "");
             context.emit("update:modelValue", e.target.value);
             // 实时校验，通知父组件
             // this.parent.$emit("validate");
@@ -39,10 +45,12 @@ export default {
 
         const classObject = computed(() => {
             return {
-                large: props.type && props.type === "large",
-                medium: props.type && props.type === "medium",
+                large: props.size && props.size === "large",
+                medium: props.size && props.size === "medium",
+                medium: props.size && props.size === "small",
             };
         });
+
         return { onInput, classObject };
     },
 };
@@ -52,7 +60,6 @@ export default {
 .z-input {
     /* line-height: 2rem; */
     position: relative;
-    margin-bottom: 2rem;
     /* display: flex;
     justify-content: space-between;
     align-items: center; */

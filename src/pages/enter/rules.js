@@ -1,14 +1,14 @@
-export const useRules = (locale, t, type) => {
+export const useRules = (t, type) => {
     const room_No = [
         {
             required: true,
-            message: t('message.enter.M001', {}, { locale: locale }),
+            message: t('message.enter.M001'),
         },
     ]
     const user_name = [
         {
             required: true,
-            message: t('message.enter.M002', {}, { locale: locale }),
+            message: t('message.enter.M002'),
         },
     ]
     if (type === 'enter') {

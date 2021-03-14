@@ -8,20 +8,27 @@
         <link rel="stylesheet" href="./src/loading.css" />
     </head>
 
-    <body>
-        <div id="app">
-            <div class="system-loading">
-                <div class="loading-content">
-                    <span class="spin-dot">
-                        <i class="spin-dot-item"></i>
-                        <i class="spin-dot-item"></i>
-                        <i class="spin-dot-item"></i>
-                        <i class="spin-dot-item"></i>
-                    </span>
-                    <span class="loading-tip">Loading...</span>
-                </div>
-            </div>
-        </div>
-        <script type="module" src="/src/main.js"></script>
-    </body>
+<body>
+  <div id="app">
+    <div class="system-loading">
+      <div id="tip_main" class="loading-content">
+        <span class="spin-dot ">
+          <i class="spin-dot-item"></i>
+          <i class="spin-dot-item"></i>
+          <i class="spin-dot-item"></i>
+          <i class="spin-dot-item"></i>
+        </span>
+        <span class="loading-tip">Loading...</span>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    if (navigator.userAgent.indexOf('.NET') > -1 || navigator.userAgent.indexOf('Edge') > -1) {
+      document.getElementById('tip_main').innerHTML = "This system is developed with vue3, it is not compatible with IE and Edge"
+    }
+  </script>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>

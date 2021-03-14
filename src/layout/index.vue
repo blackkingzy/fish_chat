@@ -1,46 +1,40 @@
 <template>
-    <div class="layout">
+    <div class="layout" :class="wrapperClass">
         <div class="header">
             <z-header></z-header>
         </div>
         <div class="main">
-            <router-view></router-view>
+            <slot name="default"></slot>
+            <!-- <router-view></router-view> -->
         </div>
         <div class="footer"><z-footer></z-footer></div>
     </div>
 </template>
 
 <script>
-import ZFooter from '../components/ZFooter.vue'
-import ZHeader from '../components/ZHeader.vue'
+import { computed } from "vue";
+import ZFooter from "../components/ZFooter.vue";
+import ZHeader from "../components/ZHeader.vue";
 export default {
+    props: {
+        wrapperClass: {
+            type: String,
+        },
+    },
     components: {
         ZFooter,
         ZHeader,
     },
-    setup() {
-        return {}
-    },
-}
+};
 </script>
 
 <style lang="css" scoped>
 @media screen and (max-width: 768px) {
     .layout {
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
         flex-direction: column;
-    }
-    .header {
-        display: none;
-    }
-    .main {
-        height: 100%;
-        width: 100%;
-    }
-    .footer {
-        display: none;
     }
 }
 @media screen and (min-width: 768px) {

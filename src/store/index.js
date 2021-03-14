@@ -2,6 +2,13 @@ import Vuex from 'vuex'
 import { removeCookie, setCookie } from '../utils/cookie'
 import { message } from 'ant-design-vue'
 
+const getGlobalInfo = () => {
+    return {
+        domain: document.domain,
+        port: window.location.port
+    }
+}
+
 //用户信息
 const getDefaultUserInfo = () => {
     return {
@@ -14,6 +21,7 @@ const getDefaultUserInfo = () => {
 const getDefaultRoomInfo = () => {
     return {
         room_No: '',
+        room_password: '',
         users: [],
         user_count: 0,
         chat_history: [],
@@ -29,10 +37,13 @@ const getDefaultState = () => {
 
 export default Vuex.createStore({
     state: {
+        global: getGlobalInfo(),
         user_info: getDefaultUserInfo(),
         room_info: getDefaultRoomInfo(),
     },
     getters: {
+        domain: (state) => state.global.domain,
+        port: (state) => state.global.port,
         user_id: (state) => state.user_info.user_id,
         user_info: (state) => state.user_info,
         room_No: (state) => state.room_info.room_No,
@@ -46,6 +57,9 @@ export default Vuex.createStore({
         },
         SET_ROOM_NO: (state, room_No) => {
             state.room_info.room_No = room_No
+        },
+        SET_ROOM_PASSWORD: (state, room_password) => {
+            state.room_info.room_password = room_password
         },
         SET_USERS: (state, users) => {
             state.room_info.users = users
@@ -73,6 +87,7 @@ export default Vuex.createStore({
     actions: {
         successEnter: ({ commit }, { user_info, room_info, room_No }) => {
             commit('SET_ROOM_NO', room_No)
+            commit('SET_ROOM_PASSWORD', room_info.room_password)
             commit('SET_USERS', room_info.users)
             commit('SET_USER_COUNT', room_info.user_count)
             commit('SET_USER_ID', user_info.user_id)

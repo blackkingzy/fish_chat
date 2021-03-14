@@ -1,15 +1,17 @@
 import io from 'socket.io-client'
+import { h } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { getCookie } from '../../utils/cookie.js'
 import { useI18n } from 'vue-i18n'
 import Constants from './constants'
+import { Modal } from 'ant-design-vue';
 
 export const useIo = (url, { $message, spinning }) => {
     const router = useRouter()
     const store = useStore()
     const { t } = useI18n()
-    console.log(getCookie('io'))
+
     //建立连接
     const socket = io(url, {
         reconnectionDelayMax: 30000,
@@ -49,27 +51,36 @@ export const useIo = (url, { $message, spinning }) => {
     socket.on(Constants.EVENT_TYPE.DISCONNECT, (reason) => {
         //服务器断开后,前台需要对应返回之前页
         if (reason !== 'io client disconnect') {
-            router.push({ path: '/' })
-            $message.error(reason)
+            connect_error(spinning, store, router, socket, t, Constants.EVENT_TYPE.DISCONNECT, reason)
             console.log('disconnect')
         }
     })
     // 连接错误-仅仅是连接时候的错误
     socket.on(Constants.EVENT_TYPE.ERROR, (error) => {
-        console.log('连接失败')
-        //连接错误,回到首页
-        router.push({ path: '/' })
-        $message.error(error.message)
-        console.log('error', error)
+        connect_error(spinning, store, router, socket, t, Constants.EVENT_TYPE.ERROR, error)
+        console.log('连接失败', error)
     })
 
     //token过期
     socket.on(Constants.EVENT_TYPE.TOKEN_EXPORED, (error) => {
-        console.log('tokenExpired')
-        router.push({ path: '/' })
-        $message.error(error.message)
-        console.log('error', error)
+        onnect_error(spinning, store, router, socket, t, Constants.EVENT_TYPE.TOKEN_EXPORED, error)
+        console.log('tokenExpired', error)
     })
 
     return socket
+}
+
+const connect_error = (spinning, store, router, socket, t, event, error) => {
+    spinning.value = true
+    store.dispatch("quitRoom", { t });
+    socket.close();
+    Modal.error({
+        title: t('label.chat.L007'),
+        content: h('div', {}, [t('message.chat.M006'), h('div', { class: 'connect_error' }, `${event.toUpperCase()}: ${typeof error === 'string' ? error : error.message}`)]),
+        onOk() {
+            router.go(0)
+        },
+        centered: true,
+        okText: t('label.global.L003')
+    });
 }

@@ -17,23 +17,32 @@ import { ref, getCurrentInstance } from "vue";
 import { post } from "../../../utils/http";
 import { router } from "../../../router";
 import { useI18n } from "vue-i18n";
-
+import inputpassword from "./InputPassword.js";
+import { message } from "ant-design-vue";
 export default {
     props: ["visible", "destroy", "params", "success", "fault"],
     setup(props, content) {
         const dialogVisible = ref(props.visible);
         const { t } = useI18n();
 
-        function createRoom() {
-            post(
-                "/api/create",
-                props.params,
-                (data) => {
-                    props.success(data);
-                    dialogVisible.value = false;
-                },
-                props.fault
-            );
+        async function createRoom() {
+            try {
+                dialogVisible.value = false;
+                props.params.room_info.room_password = await inputpassword(t);
+                post(
+                    "/api/create",
+                    props.params,
+                    (data) => {
+                        props.success(data);
+                    },
+                    props.fault
+                );
+            } catch (error) {
+                if (error) {
+                    console.log(error);
+                    $message.error(error.message);
+                }
+            }
         }
 
         return {

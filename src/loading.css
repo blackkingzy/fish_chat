@@ -56,11 +56,14 @@ html, body {
     animation-delay: 1.2s;
 }
 
-.loading-tip {
-    display: block;
+.loading-content {
     font-size: 2rem;
     font-weight: 700;
     margin-top: 0.5rem;
+}
+
+.loading-tip {
+    display: block;
 }
 
 .system-loading {
@@ -70,7 +73,9 @@ html, body {
     align-items: center;
     text-align: center;
 }
+
 /* 旋转动画 */
+
 @-webkit-keyframes Rotate {
     to {
         transform: rotate(405deg);
@@ -84,6 +89,7 @@ html, body {
 }
 
 /* 透明度变化动画 */
+
 @-webkit-keyframes SpinMove {
     to {
         opacity: 1;
