@@ -2,15 +2,15 @@
     <div class="note_contain">
         <a-card style="border: none">
             <p style="color: rgb(0, 153, 255)">
-                {{ `${t("message.note.M002")}😄` }}
+                {{ `${t('message.note.M002')}😄` }}
             </p>
             <p>
-                {{ `${t("message.note.M002")}👮` }}
+                {{ `${t('message.note.M002')}👮` }}
             </p>
-            <p>{{ `${t("message.note.M003")}🔥` }}</p>
-            <p>{{ `${t("message.note.M004")}💬` }}</p>
+            <p>{{ `${t('message.note.M003')}🔥` }}</p>
+            <p>{{ `${t('message.note.M004')}💬` }}</p>
             <p>
-                {{ t("message.note.M005") }}
+                {{ t('message.note.M005') }}
                 <strong
                     ><a
                         target="_blank"
@@ -18,7 +18,7 @@
                         >https://github.com/blackkingzy/fish_chat</a
                     ></strong
                 ><br />
-                {{ t("message.note.M006") }}
+                {{ t('message.note.M006') }}
                 <strong
                     ><a
                         target="_blank"
@@ -26,15 +26,15 @@
                         >https://github.com/blackkingzy/fish_chat_interface</a
                     ></strong
                 ><br />
-                <strong>{{ `${t("message.note.M007")}👍🙏😘` }}</strong>
+                <strong>{{ `${t('message.note.M007')}👍🙏😘` }}</strong>
             </p>
             <p>
-                {{ t("message.note.M008") }}
+                {{ t('message.note.M008') }}
                 <strong>1003975792@qq.com✉</strong>
             </p>
             <p>
                 <em style="color: red; font-weight: 700">{{
-                    `${t("message.note.M009")}🌼`
+                    `${t('message.note.M009')}🌼`
                 }}</em>
             </p>
         </a-card>
@@ -42,14 +42,14 @@
 </template>
 
 <script>
-import { useI18n } from "vue-i18n";
+import { useI18n } from 'vue-i18n'
 export default {
-    name: "note",
+    name: 'note',
     setup() {
-        const { t } = useI18n();
-        return { t };
+        const { t } = useI18n()
+        return { t }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

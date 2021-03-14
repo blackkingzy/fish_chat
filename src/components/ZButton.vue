@@ -12,26 +12,26 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed } from 'vue'
 export default {
     inheritAttrs: false,
     props: {
         type: {
             type: String,
-            default: "default",
+            default: 'default',
         },
     },
     setup(props) {
         const classObject = computed(() => {
             return {
-                main: props.type && props.type === "main",
-                new: props.type && props.type === "new",
-            };
-        });
+                main: props.type && props.type === 'main',
+                new: props.type && props.type === 'new',
+            }
+        })
 
-        return { classObject };
+        return { classObject }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

@@ -5,7 +5,7 @@ import { message } from 'ant-design-vue'
 const getGlobalInfo = () => {
     return {
         domain: document.domain,
-        port: window.location.port
+        port: window.location.port,
     }
 }
 

@@ -25,13 +25,13 @@
 </template>
 
 <script>
-import { computed, ref, onMounted } from "vue";
-import { useStore } from "vuex";
+import { computed, ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 export default {
     props: {
         avatar: {
             type: String,
-            default: "../../../assets/logo.png",
+            default: '../../../assets/logo.png',
         },
         user_id: String,
         user_name: String,
@@ -39,23 +39,23 @@ export default {
         height: String,
     },
     setup(props) {
-        const messageDom = ref(null);
-        const store = useStore();
+        const messageDom = ref(null)
+        const store = useStore()
 
         onMounted(() => {
             // 在渲染完成后, 这个 div DOM 会被赋值给 message ref 对象
             //让可视区始终保持在最下面
             // messageDom.value.scrollIntoView(false)
-        });
+        })
         const msg_positon = computed(() => {
             return {
                 self_message: props.user_id === store.getters.user_info.user_id,
-            };
-        });
+            }
+        })
 
-        return { messageDom, msg_positon, store };
+        return { messageDom, msg_positon, store }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

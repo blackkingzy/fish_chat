@@ -21,13 +21,13 @@
                         @click="createRoom"
                         type="new"
                         class="create_button"
-                        >{{ t("label.enter.L001") }}</z-button
+                        >{{ t('label.enter.L001') }}</z-button
                     >
                     <z-button
                         @click="enterRoom"
                         type="main"
                         class="create_button"
-                        >{{ t("label.enter.L002") }}</z-button
+                        >{{ t('label.enter.L002') }}</z-button
                     >
                 </div>
             </div>
@@ -36,22 +36,22 @@
 </template>
 
 <script>
-import layout from "../../layout/index.vue";
-import ZInput from "../../components/ZInput.vue";
-import ZButton from "../../components/ZButton.vue";
-import { reactive, watchEffect, ref, getCurrentInstance, onMounted } from "vue";
-import { router } from "../../router";
-import { get, post } from "../../utils/http";
-import { create } from "../../utils/create";
+import layout from '../../layout/index.vue'
+import ZInput from '../../components/ZInput.vue'
+import ZButton from '../../components/ZButton.vue'
+import { reactive, watchEffect, ref, getCurrentInstance, onMounted } from 'vue'
+import { router } from '../../router'
+import { get, post } from '../../utils/http'
+import { create } from '../../utils/create'
 // import CreateRoom from "../create/index.vue";
-import short from "short-uuid";
-import { setCookie } from "../../utils/cookie.js";
-import { useStore } from "vuex";
-import { validate } from "../../utils/validate.js";
-import CreateRandomRoom from "./components/CreateRandomRoom.vue";
-import { useI18n } from "vue-i18n";
-import { useRules } from "./rules.js";
-import inputpassword from "./components/InputPassword.js";
+import short from 'short-uuid'
+import { setCookie } from '../../utils/cookie.js'
+import { useStore } from 'vuex'
+import { validate } from '../../utils/validate.js'
+import CreateRandomRoom from './components/CreateRandomRoom.vue'
+import { useI18n } from 'vue-i18n'
+import { useRules } from './rules.js'
+import inputpassword from './components/InputPassword.js'
 
 export default {
     components: {
@@ -62,57 +62,57 @@ export default {
     setup() {
         const {
             $message,
-        } = getCurrentInstance().appContext.config.globalProperties;
-        const store = useStore();
-        const { t } = useI18n();
+        } = getCurrentInstance().appContext.config.globalProperties
+        const store = useStore()
+        const { t } = useI18n()
 
-        const room_No = ref("");
-        const user_name = ref("");
-        let user_id = "";
+        const room_No = ref('')
+        const user_name = ref('')
+        let user_id = ''
 
         //进入房间模块
         async function enterRoom() {
-            console.log("请求进入房间");
+            console.log('请求进入房间')
             try {
                 await validate(
                     {
                         room_No: room_No.value,
                         user_name: user_name.value,
                     },
-                    useRules(t, "enter")
-                );
-                const { isHasPassword } = await get("/api/isHasPassword", {
+                    useRules(t, 'enter')
+                )
+                const { isHasPassword } = await get('/api/isHasPassword', {
                     room_No: room_No.value,
-                });
-                let password = "";
+                })
+                let password = ''
                 if (isHasPassword) {
-                    password = await inputpassword(t, false);
+                    password = await inputpassword(t, false)
                 }
-                user_id = short.generate();
+                user_id = short.generate()
                 const user_info = {
                     user_id: user_id,
                     user_name: user_name.value,
-                };
+                }
                 const room_info = {
                     room_No: room_No.value,
                     room_password: password,
-                };
-                const data = { room_info, user_info };
-                await post("/api/enter", data, successEnter, fault);
+                }
+                const data = { room_info, user_info }
+                await post('/api/enter', data, successEnter, fault)
             } catch (error) {
                 if (error) {
-                    console.log(error);
-                    $message.error(error.message);
+                    console.log(error)
+                    $message.error(error.message)
                 }
             }
         }
         //通用的错误回调函数
         function fault(error) {
-            $message.error(error.message);
+            $message.error(error.message)
         }
 
         function successEnter(data) {
-            console.log(data);
+            console.log(data)
             //请求成功跳转页面
             const params = {
                 user_info: {
@@ -121,10 +121,10 @@ export default {
                 },
                 room_No: data.room_No,
                 room_info: data.room_info,
-            };
-            store.dispatch("successEnter", params);
-            setCookie("token", data.token);
-            router.push({ path: "/chat" });
+            }
+            store.dispatch('successEnter', params)
+            setCookie('token', data.token)
+            router.push({ path: '/chat' })
         }
 
         //创建房间模块
@@ -135,34 +135,34 @@ export default {
                         user_name: user_name.value,
                     },
                     useRules(t)
-                );
-                user_id = short.generate();
-                let password = "";
+                )
+                user_id = short.generate()
+                let password = ''
                 const user_info = {
                     user_id: user_id,
                     user_name: user_name.value,
-                };
+                }
                 const room_info = {
                     room_No: room_No.value,
                     room_password: password,
-                };
-                const data = { room_info, user_info };
+                }
+                const data = { room_info, user_info }
                 //如果自己输入了room_No
                 if (room_No.value) {
-                    password = await inputpassword(t);
-                    await post("/api/create", data, successCreate, fault);
+                    password = await inputpassword(t)
+                    await post('/api/create', data, successCreate, fault)
                 } else {
                     create(CreateRandomRoom, {
                         visible: true,
                         params: data,
                         success: successCreate,
                         fault: fault,
-                    });
+                    })
                 }
             } catch (error) {
                 if (error) {
-                    console.log(error);
-                    $message.error(error.message);
+                    console.log(error)
+                    $message.error(error.message)
                 }
             }
 
@@ -174,23 +174,23 @@ export default {
                     },
                     room_No: data.room_No,
                     room_info: data.room_info,
-                };
+                }
 
-                store.dispatch("successEnter", params);
-                setCookie("token", data.token);
-                router.push({ path: "/chat" });
+                store.dispatch('successEnter', params)
+                setCookie('token', data.token)
+                router.push({ path: '/chat' })
             }
             //通用的错误回调函数
             // function fault(error) {
             //     $message.error(error.message)
             // }
-        };
+        }
 
         // const test = ref(0)
         // watchEffect(() => {
         //     console.log(`${test.value}hook`)
         // })
-        return { room_No, user_name, createRoom, enterRoom, t };
+        return { room_No, user_name, createRoom, enterRoom, t }
     },
 }
 </script>

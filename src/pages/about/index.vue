@@ -64,32 +64,32 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { get } from "../../utils/http";
-import { getTimeDiff } from "../../utils/index.js";
+import { computed, onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { get } from '../../utils/http'
+import { getTimeDiff } from '../../utils/index.js'
 export default {
-    props: ["visible", "destroy", "aboutInfo"],
+    props: ['visible', 'destroy', 'aboutInfo'],
     setup(props, content) {
-        const { t } = useI18n();
-        const dialogVisible = ref(props.visible);
+        const { t } = useI18n()
+        const dialogVisible = ref(props.visible)
 
-        const now = ref(new Date());
+        const now = ref(new Date())
 
         setInterval(() => {
-            now.value = new Date();
-        }, 1000);
+            now.value = new Date()
+        }, 1000)
 
         const jobTime = computed(() => {
             return getTimeDiff(
                 new Date(props.aboutInfo.developerInfo.jobStartTime),
                 now.value
-            );
-        });
+            )
+        })
 
-        return { dialogVisible, t, jobTime };
+        return { dialogVisible, t, jobTime }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

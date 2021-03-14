@@ -14,11 +14,11 @@
                         v-show="!spinning"
                     ></i>
                     <div class="number">
-                        <span> {{ `${t("label.chat.L004")}:` }}</span>
+                        <span> {{ `${t('label.chat.L004')}:` }}</span>
                         <span>{{ store.getters.room_info.room_No }}</span>
                     </div>
                     <div class="count">
-                        <span> {{ `${t("label.chat.L005")}:` }}</span>
+                        <span> {{ `${t('label.chat.L005')}:` }}</span>
                         <span>{{ store.getters.room_info.user_count }}</span>
                     </div>
                     <i
@@ -44,7 +44,7 @@
                                     @enter="sendMessage"
                                 ></z-text-area>
                                 <z-button @click="sendMessage" type="main">
-                                    {{ t("label.chat.L001") }}
+                                    {{ t('label.chat.L001') }}
                                 </z-button>
                             </div>
                         </div>
@@ -55,32 +55,32 @@
         </a-spin>
         <div class="leave_button" v-show="!spinning">
             <a-button type="danger" @click="leaveRoom">
-                {{ t("label.chat.L002") }}
+                {{ t('label.chat.L002') }}
             </a-button>
         </div>
     </layout>
 </template>
 
 <script>
-import layout from "../../layout/index.vue";
-import { getCurrentInstance } from "vue";
-import ChatContent from "./components/ChatContent.vue";
-import ZTextArea from "./components/ZTextArea.vue";
-import ZButton from "../../components/ZButton.vue";
-import ChatSlide from "./components/ChatSlide.vue";
-import LeaveRoom from "./components/LeaveRoom.vue";
-import Emoji from "./components/Emoji.vue";
-import { reactive, ref, watchEffect } from "vue";
-import { isEmpty } from "../../utils/index.js";
-import { get, post, del } from "../../utils/http";
-import { onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
-import { create } from "../../utils/create";
-import { router } from "../../router/index.js";
-import { removeCookie } from "../../utils/cookie.js";
-import { useIo } from "./io.js";
-import { useStore } from "vuex";
-import { useI18n } from "vue-i18n";
-import Drawer from "./components/Drawer.vue";
+import layout from '../../layout/index.vue'
+import { getCurrentInstance } from 'vue'
+import ChatContent from './components/ChatContent.vue'
+import ZTextArea from './components/ZTextArea.vue'
+import ZButton from '../../components/ZButton.vue'
+import ChatSlide from './components/ChatSlide.vue'
+import LeaveRoom from './components/LeaveRoom.vue'
+import Emoji from './components/Emoji.vue'
+import { reactive, ref, watchEffect } from 'vue'
+import { isEmpty } from '../../utils/index.js'
+import { get, post, del } from '../../utils/http'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import { create } from '../../utils/create'
+import { router } from '../../router/index.js'
+import { removeCookie } from '../../utils/cookie.js'
+import { useIo } from './io.js'
+import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
+import Drawer from './components/Drawer.vue'
 
 export default {
     components: {
@@ -96,13 +96,13 @@ export default {
         //getCurrentInstancez这个方法在务必要在setup中调用,在其内部的方法中调用无效
         const {
             $message,
-        } = getCurrentInstance().appContext.config.globalProperties;
+        } = getCurrentInstance().appContext.config.globalProperties
 
-        const spinning = ref(true);
-        const store = useStore();
-        const { t } = useI18n();
+        const spinning = ref(true)
+        const store = useStore()
+        const { t } = useI18n()
 
-        const msgValue = ref("");
+        const msgValue = ref('')
         // const messageList = reactive([
         //     {
         //         user_id: '123456',
@@ -123,49 +123,49 @@ export default {
         const socket = useIo(`${store.getters.domain}:3010`, {
             $message,
             spinning,
-        });
+        })
         //只要离开当前页面就算离开房间
         onBeforeRouteLeave(async (to, from, next) => {
             //router.push({ path: "/404" });在钩子函数中调用router.push会导致该钩子函数持续调用,务必要等一个路由完全结束在调用下一个
-            console.log("我要离开该房间");
-            await del("api/quit").catch((error) => {
-                console.log(error);
-            });
-            store.dispatch("quitRoom", { t });
-            socket.close();
-            next();
-        });
+            console.log('我要离开该房间')
+            await del('api/quit').catch((error) => {
+                console.log(error)
+            })
+            store.dispatch('quitRoom', { t })
+            socket.close()
+            next()
+        })
         function sendMessage() {
             if (isEmpty(msgValue.value)) {
-                console.log("qin bu yao shu ru kong neirong");
-                return;
+                console.log('qin bu yao shu ru kong neirong')
+                return
             }
-            console.log(msgValue.value);
+            console.log(msgValue.value)
             const msg = {
                 user_id: store.getters.user_info.user_id,
                 user_name: store.getters.user_info.user_name,
                 message_content: msgValue.value,
-            };
-            store.getters.chat_history.push(msg);
-            socket.emit("send", msg);
-            msgValue.value = "";
+            }
+            store.getters.chat_history.push(msg)
+            socket.emit('send', msg)
+            msgValue.value = ''
         }
 
         function leaveRoom() {
-            console.log("wo yao likai");
+            console.log('wo yao likai')
             create(LeaveRoom, {
                 visible: true,
-            });
+            })
         }
 
         function addEmoji(emoji) {
-            msgValue.value += emoji;
+            msgValue.value += emoji
         }
 
-        const isShow = ref(false);
+        const isShow = ref(false)
         function showDrawer() {
-            console.log("1");
-            isShow.value = true;
+            console.log('1')
+            isShow.value = true
         }
 
         return {
@@ -178,9 +178,9 @@ export default {
             t,
             showDrawer,
             isShow,
-        };
+        }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>
@@ -300,7 +300,7 @@ export default {
     }
     /* content是必须要写的,只有写了其,伪元素才能撑起来 */
     .leave_icon::after {
-        content: "";
+        content: '';
         background-image: url(../../assets/close.svg);
         position: absolute;
         width: 28px;
@@ -315,7 +315,7 @@ export default {
         left: 0;
     }
     .open_drawer::after {
-        content: "";
+        content: '';
         background-image: url(../../assets/menu.svg);
         position: absolute;
         width: 28px;

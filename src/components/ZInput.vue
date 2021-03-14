@@ -16,17 +16,17 @@
 </template>
 
 <script>
-import { computed } from "vue";
+import { computed } from 'vue'
 export default {
     inheritAttrs: false,
     props: {
         type: {
             type: String,
-            default: "text",
+            default: 'text',
         },
         size: {
             type: String,
-            default: "default",
+            default: 'default',
         },
         labelWidth: {
             type: String,
@@ -37,23 +37,23 @@ export default {
     setup(props, context) {
         function onInput(e) {
             //去除空格,这样写其实本质上空格输入了,但紧接着被替换了
-            e.target.value = e.target.value.replace(/\s+/g, "");
-            context.emit("update:modelValue", e.target.value);
+            e.target.value = e.target.value.replace(/\s+/g, '')
+            context.emit('update:modelValue', e.target.value)
             // 实时校验，通知父组件
             // this.parent.$emit("validate");
         }
 
         const classObject = computed(() => {
             return {
-                large: props.size && props.size === "large",
-                medium: props.size && props.size === "medium",
-                medium: props.size && props.size === "small",
-            };
-        });
+                large: props.size && props.size === 'large',
+                medium: props.size && props.size === 'medium',
+                medium: props.size && props.size === 'small',
+            }
+        })
 
-        return { onInput, classObject };
+        return { onInput, classObject }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

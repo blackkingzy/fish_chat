@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import { computed } from "vue";
-import ZFooter from "../components/ZFooter.vue";
-import ZHeader from "../components/ZHeader.vue";
+import { computed } from 'vue'
+import ZFooter from '../components/ZFooter.vue'
+import ZHeader from '../components/ZHeader.vue'
 export default {
     props: {
         wrapperClass: {
@@ -25,7 +25,7 @@ export default {
         ZFooter,
         ZHeader,
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

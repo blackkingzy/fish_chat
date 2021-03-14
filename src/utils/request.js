@@ -65,11 +65,13 @@ service.interceptors.response.use(
     },
     (error) => {
         //非自定义的错误码在这里
-        console.log(error.response);
+        console.log(error.response)
         const { status } = error.response
         const { url } = error.response.config
-        console.log(url);
-        ['api/isOpenService', 'api/info'].includes(url) ? '' : errorCallback(status)
+        console.log(url)
+        ;['api/isOpenService', 'api/info'].includes(url)
+            ? ''
+            : errorCallback(status)
         // Message({
         //     message: error.message,
         //     type: 'error',
@@ -80,12 +82,13 @@ service.interceptors.response.use(
     }
 )
 
-
 export const errorCallback = (status, next) => {
     if (503 === status) {
         //服务器崩溃
         getCookie('token') ? removeCookie('token') : ''
-        next ? next({ path: `/${status}` }) : router.push({ path: `/${status}` })
+        next
+            ? next({ path: `/${status}` })
+            : router.push({ path: `/${status}` })
     } else if (404 === status) {
         router.push({ path: '/404' })
     }

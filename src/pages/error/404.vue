@@ -21,25 +21,25 @@
 </template>
 
 <script>
-import ZButton from "../../components/ZButton.vue";
-import { useStore } from "vuex";
-import { computed } from "vue";
+import ZButton from '../../components/ZButton.vue'
+import { useStore } from 'vuex'
+import { computed } from 'vue'
 export default {
     components: {
         ZButton,
     },
     setup() {
-        const store = useStore();
+        const store = useStore()
         const href = computed(() => {
-            if (store.getters.domain.indexof("www") !== -1) {
-                return `http://${store.getters.domain}`;
+            if (store.getters.domain.indexof('www') !== -1) {
+                return `http://${store.getters.domain}`
             } else {
-                `http://${store.getters.domain}:${store.getters.port}`;
+                ;`http://${store.getters.domain}:${store.getters.port}`
             }
-        });
-        return { store };
+        })
+        return { store }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

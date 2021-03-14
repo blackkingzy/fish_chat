@@ -8,13 +8,13 @@ const method = (httpMethod) => (url, data, onSuccess, onFault, headers) => {
         headers,
     })
         .then((response) => {
-            console.log('http-success');
+            console.log('http-success')
             // handle success
             onSuccess ? onSuccess(response) : ''
             return response
         })
         .catch((error) => {
-            console.log('http', error);
+            console.log('http', error)
             // handle error
             if (onFault) {
                 onFault(error)

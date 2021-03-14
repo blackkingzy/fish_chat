@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import { ref, watch } from "vue";
-import ChatSlide from "./ChatSlide.vue";
-import SelectLanguage from "../../../components/SelectLanguage.vue";
-import ZFooter from "../../../components/ZFooter.vue";
-import { useI18n } from "vue-i18n";
+import { ref, watch } from 'vue'
+import ChatSlide from './ChatSlide.vue'
+import SelectLanguage from '../../../components/SelectLanguage.vue'
+import ZFooter from '../../../components/ZFooter.vue'
+import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
@@ -28,28 +28,28 @@ export default {
         ChatSlide,
         ZFooter,
     },
-    props: ["isShow"],
+    props: ['isShow'],
     setup() {
-        const { t } = useI18n();
-        return { t };
+        const { t } = useI18n()
+        return { t }
     },
     data() {
         return {
             drawerVisible: this.isShow,
-        };
+        }
     },
     methods: {
         close() {
-            this.$emit("update:isShow", false);
+            this.$emit('update:isShow', false)
         },
     },
     //在setup中,永远记住props中,除了引用类型(reactive([]),reactive({})或者ref([]),ref({})),其它类型的值父组件改变子组件中都监听不到
     watch: {
         isShow(newValue, oldValue) {
-            this.drawerVisible = newValue;
+            this.drawerVisible = newValue
         },
     },
-};
+}
 </script>
 
 <style lang="css">

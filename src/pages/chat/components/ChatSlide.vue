@@ -12,18 +12,18 @@
 </template>
 
 <script>
-import { reactive } from "vue";
-import UserInfo from "./UserInfo.vue";
-import { useStore } from "vuex";
+import { reactive } from 'vue'
+import UserInfo from './UserInfo.vue'
+import { useStore } from 'vuex'
 export default {
     components: {
         UserInfo,
     },
     setup() {
-        const store = useStore();
-        return { store };
+        const store = useStore()
+        return { store }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

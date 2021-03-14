@@ -6,15 +6,15 @@
 </template>
 
 <script>
-import SelectLanguage from "./SelectLanguage.vue";
+import SelectLanguage from './SelectLanguage.vue'
 export default {
     components: {
         SelectLanguage,
     },
     setup() {
-        return {};
+        return {}
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

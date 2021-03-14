@@ -8,34 +8,33 @@
         centered
         :afterClose="destroy"
     >
-        {{ t("message.chat.M001") }}
+        {{ t('message.chat.M001') }}
     </a-modal>
 </template>
 
 <script>
-import { ref, getCurrentInstance } from "vue";
-import { get } from "../../../utils/http";
-import { router } from "../../../router";
-import { useI18n } from "vue-i18n";
+import { ref, getCurrentInstance } from 'vue'
+import { get } from '../../../utils/http'
+import { router } from '../../../router'
+import { useI18n } from 'vue-i18n'
 export default {
-    props: ["visible", "destroy"],
+    props: ['visible', 'destroy'],
     setup(props, content) {
-        const dialogVisible = ref(props.visible);
-        const { t } = useI18n();
+        const dialogVisible = ref(props.visible)
+        const { t } = useI18n()
 
         function leaveRoom() {
-            router.push({ path: "/" });
-            dialogVisible.value = false;
+            router.push({ path: '/' })
+            dialogVisible.value = false
         }
 
         return {
             dialogVisible,
             leaveRoom,
             t,
-        };
+        }
     },
-};
+}
 </script>
 
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>

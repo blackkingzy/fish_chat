@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import ZButton from "../../components/ZButton.vue";
-export default {};
+import ZButton from '../../components/ZButton.vue'
+export default {}
 </script>
 
 <style lang="css" scoped>

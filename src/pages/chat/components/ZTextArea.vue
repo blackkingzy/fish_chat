@@ -15,16 +15,16 @@
 <script>
 export default {
     inheritAttrs: false,
-    props: ["modelValue"],
+    props: ['modelValue'],
     setup(props, context) {
         function onInput(e) {
-            context.emit("update:modelValue", e.target.value);
+            context.emit('update:modelValue', e.target.value)
             // 实时校验，通知父组件
             // this.parent.$emit("validate");
         }
-        return { onInput };
+        return { onInput }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

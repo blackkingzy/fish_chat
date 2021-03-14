@@ -4,7 +4,7 @@ export const message_cn = {
         M001: '房间号不能为空',
         M002: '昵称不能为空',
         M003: '是否随机创建房间?',
-        M004: '提示:不输入密码则创建无密码房间,其它人进入不需要输入密码...'
+        M004: '提示:不输入密码则创建无密码房间,其它人进入不需要输入密码...',
     },
     chat: {
         M001: '你确定要离开该房间吗?',
@@ -12,7 +12,7 @@ export const message_cn = {
         M003: '{name}进入了房间',
         M004: '{name}离开了房间',
         M005: '离开了{room_No}房间',
-        M006: '服务器发生错误...'
+        M006: '服务器发生错误...',
     },
     note: {
         M001: '网站仅限于上班想聊天,但不方便使用手机和PC端聊天工具的人群',
@@ -39,7 +39,8 @@ export const message_en = {
         M001: 'Room No cannot be empty',
         M002: 'Nickname should be filled',
         M003: 'Are rooms created randomly?',
-        M004: "Tip: If you don't enter a password, you will create a password-free room, and other people do not need to enter a password to enter...",
+        M004:
+            "Tip: If you don't enter a password, you will create a password-free room, and other people do not need to enter a password to enter...",
         M005: 'Password cannot be empty',
     },
     chat: {
@@ -48,7 +49,7 @@ export const message_en = {
         M003: '{name} entered the room',
         M004: '{name} left the room',
         M005: 'Exited room {room_No}',
-        M006: 'Server error...'
+        M006: 'Server error...',
     },
     note: {
         M001:

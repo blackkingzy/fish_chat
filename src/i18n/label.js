@@ -12,7 +12,7 @@ export const label_cn = {
         L004: '请输入昵称',
         L005: '@:label.enter.L001@:label.global.L003',
         L006: '输入',
-        L007: '请输入密码'
+        L007: '请输入密码',
     },
     chat: {
         L001: '发送',
@@ -50,7 +50,7 @@ export const label_cn = {
         L017: '框架',
         L018: '服务器',
         L019: '内存大小',
-    }
+    },
 }
 
 export const label_en = {
@@ -67,7 +67,7 @@ export const label_en = {
         L004: 'Nickname',
         L005: '@:label.enter.L001 @:label.global.L003',
         L006: 'Input',
-        L007: 'Password'
+        L007: 'Password',
     },
     chat: {
         L001: 'send',
@@ -105,5 +105,5 @@ export const label_en = {
         L017: 'Frame',
         L018: 'Server',
         L019: 'Memory size',
-    }
+    },
 }

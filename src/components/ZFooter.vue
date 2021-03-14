@@ -65,31 +65,31 @@
 </template>
 
 <script>
-import Note from "./Note.vue";
-import ZDialog from "./ZDialog.vue";
-import { createVNode, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import about from "../pages/about/index.vue";
-import { create } from "../utils/create.js";
-import { get } from "../utils/http.js";
+import Note from './Note.vue'
+import ZDialog from './ZDialog.vue'
+import { createVNode, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import about from '../pages/about/index.vue'
+import { create } from '../utils/create.js'
+import { get } from '../utils/http.js'
 export default {
     components: {
         Note,
         ZDialog,
     },
     setup() {
-        const { t } = useI18n();
-        const isShow = ref(false);
+        const { t } = useI18n()
+        const isShow = ref(false)
         function openNote() {
-            isShow.value = true;
+            isShow.value = true
         }
 
         async function openDetails() {
             try {
-                const aboutInfo = await get("api/about");
-                create(about, { visible: true, aboutInfo });
+                const aboutInfo = await get('api/about')
+                create(about, { visible: true, aboutInfo })
             } catch (error) {
-                console.log(error);
+                console.log(error)
             }
         }
 
@@ -98,9 +98,9 @@ export default {
             isShow,
             openDetails,
             t,
-        };
+        }
     },
-};
+}
 </script>
 
 <style lang="css" scoped>

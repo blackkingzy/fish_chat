@@ -10,7 +10,6 @@ import error_404 from '../pages/error/404.vue'
 import error_503 from '../pages/error/503.vue'
 import { errorCallback } from '../utils/request.js'
 
-
 //笔记：注意:path '/'直接redirect 到'/enter',该beforeEach方法直接略过了匹配path '/',这应该是vue-router的规则
 const routes = [
     // {
