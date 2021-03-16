@@ -72,7 +72,6 @@ export default {
 
         //进入房间模块
         async function enterRoom() {
-            console.log('请求进入房间')
             try {
                 await validate(
                     {
@@ -112,7 +111,6 @@ export default {
         }
 
         function successEnter(data) {
-            console.log(data)
             //请求成功跳转页面
             const params = {
                 user_info: {
@@ -137,19 +135,18 @@ export default {
                     useRules(t)
                 )
                 user_id = short.generate()
-                let password = ''
                 const user_info = {
                     user_id: user_id,
                     user_name: user_name.value,
                 }
                 const room_info = {
                     room_No: room_No.value,
-                    room_password: password,
                 }
                 const data = { room_info, user_info }
                 //如果自己输入了room_No
                 if (room_No.value) {
-                    password = await inputpassword(t)
+                    const password = await inputpassword(t)
+                    room_info.room_password = password
                     await post('/api/create', data, successCreate, fault)
                 } else {
                     create(CreateRandomRoom, {
@@ -180,16 +177,7 @@ export default {
                 setCookie('token', data.token)
                 router.push({ path: '/chat' })
             }
-            //通用的错误回调函数
-            // function fault(error) {
-            //     $message.error(error.message)
-            // }
         }
-
-        // const test = ref(0)
-        // watchEffect(() => {
-        //     console.log(`${test.value}hook`)
-        // })
         return { room_No, user_name, createRoom, enterRoom, t }
     },
 }
@@ -220,14 +208,14 @@ export default {
 .enter_main {
     text-align: center;
 }
-.enter_main >>> button {
+.enter_main ::v-deep(button) {
     color: #fff;
     font-size: 2rem;
     width: 100%;
     border-radius: 4px;
     height: 4rem;
 }
-.enter_main >>> .z-input {
+.enter_main ::v-deep(.z-input) {
     margin-bottom: 2rem;
 }
 .enter_button {

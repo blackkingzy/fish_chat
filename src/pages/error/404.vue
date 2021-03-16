@@ -11,10 +11,7 @@
                 button below to return to the homepage.
             </div>
             <div class="back_button">
-                <!-- <a :href="store.getters.domain">Back to home</a> -->
-                <a :href="`http://${store.getters.domain}:3000`"
-                    >Back to home</a
-                >
+                <a :href="`http://${store.getters.front_url}`">Back to home</a>
             </div>
         </div>
     </div>
@@ -30,13 +27,6 @@ export default {
     },
     setup() {
         const store = useStore()
-        const href = computed(() => {
-            if (store.getters.domain.indexof('www') !== -1) {
-                return `http://${store.getters.domain}`
-            } else {
-                ;`http://${store.getters.domain}:${store.getters.port}`
-            }
-        })
         return { store }
     },
 }
@@ -91,7 +81,7 @@ export default {
     color: #fff;
     /* font-size: 1.5rem; */
     height: 2rem;
-    width: 6rem;
+    width: 8rem;
     line-height: 2rem;
     border-radius: 1rem;
     text-align: center;

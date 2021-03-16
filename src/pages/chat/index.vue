@@ -103,27 +103,17 @@ export default {
         const { t } = useI18n()
 
         const msgValue = ref('')
-        // const messageList = reactive([
-        //     {
-        //         user_id: '123456',
-        //         user_name: 'zhangsan',
-        //         message_content:
-        //             'n9999999999999999999999999999999999999999999999999999999999999999999999999999',
-        //     },
-        //     {
-        //         user_id: '123954',
-        //         user_name: 'zhangyue',
-        //         message_content:
-        //             '66666666666666666666666666666666666666666666666666666666666666666666666666666',
-        //     },
-        // ])
-        // watchEffect(() => {
-        //     console.log(msgValue.value);
-        // });
-        const socket = useIo(`${store.getters.domain}:3010`, {
+
+        const socket = useIo(store.getters.end_socket_url, {
             $message,
             spinning,
         })
+
+        // const socket = useIo('www.fishchat.online', {
+        //     $message,
+        //     spinning,
+        // })
+
         //只要离开当前页面就算离开房间
         onBeforeRouteLeave(async (to, from, next) => {
             //router.push({ path: "/404" });在钩子函数中调用router.push会导致该钩子函数持续调用,务必要等一个路由完全结束在调用下一个
@@ -137,10 +127,9 @@ export default {
         })
         function sendMessage() {
             if (isEmpty(msgValue.value)) {
-                console.log('qin bu yao shu ru kong neirong')
                 return
             }
-            console.log(msgValue.value)
+
             const msg = {
                 user_id: store.getters.user_info.user_id,
                 user_name: store.getters.user_info.user_name,
@@ -152,7 +141,6 @@ export default {
         }
 
         function leaveRoom() {
-            console.log('wo yao likai')
             create(LeaveRoom, {
                 visible: true,
             })
@@ -164,7 +152,6 @@ export default {
 
         const isShow = ref(false)
         function showDrawer() {
-            console.log('1')
             isShow.value = true
         }
 
@@ -191,11 +178,11 @@ export default {
     background-color: rgba(255, 255, 255);
 }
 @media screen and (max-width: 768px) {
-    .chat >>> .header,
-    .chat >>> .footer {
+    .chat ::v-deep(.header),
+    .chat ::v-deep(.footer) {
         display: none;
     }
-    .chat >>> .main {
+    .chat ::v-deep(.main) {
         height: 100%;
         width: 100%;
     }
@@ -216,7 +203,7 @@ export default {
     .chat_spin {
         height: 100%;
     }
-    .chat_spin >>> .ant-spin-container {
+    .chat_spin ::v-deep(.ant-spin-container) {
         height: 100%;
     }
 }
@@ -269,16 +256,16 @@ export default {
     display: grid;
     grid-template-columns: 6fr 1fr;
 }
-.chat_main_input >>> button {
+.chat_main_input ::v-deep(button) {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-.chat_spin >>> .ant-spin {
+.chat_spin ::v-deep(.ant-spin) {
     max-height: none;
 }
-.chat_spin >>> .ant-spin-blur {
+.chat_spin ::v-deep(.ant-spin-blur) {
     opacity: 0;
 }
 @media screen and (max-width: 768px) {

@@ -35,7 +35,7 @@ export const useIo = (url, { $message, spinning }) => {
 
     //新用户进入房间
     socket.on(Constants.EVENT_TYPE.JOIN, (user) => {
-        console.log('join', user)
+        console.log('join')
         store.commit('ADD_USER', user)
         // $message.info(`${user.user_name}进入了房间`);
         $message.info(t('message.chat.M003', { name: user.user_name }))
@@ -43,7 +43,7 @@ export const useIo = (url, { $message, spinning }) => {
 
     //其它用户离开房间
     socket.on(Constants.EVENT_TYPE.LEAVE, ({ room_info, leave_user_name }) => {
-        console.log('leave', room_info)
+        console.log('leave')
         store.dispatch('otherUserQuitRoom', room_info)
         $message.warning(t('message.chat.M004', { name: leave_user_name }))
     })

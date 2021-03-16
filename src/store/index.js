@@ -5,7 +5,6 @@ import { message } from 'ant-design-vue'
 const getGlobalInfo = () => {
     return {
         domain: document.domain,
-        port: window.location.port,
     }
 }
 
@@ -43,7 +42,18 @@ export default Vuex.createStore({
     },
     getters: {
         domain: (state) => state.global.domain,
-        port: (state) => state.global.port,
+        front_url: (state) => {
+            //判断是否是开发环境还是生产环境
+            return state.global.domain.indexOf('www') !== -1
+                ? state.global.domain
+                : `${state.global.domain}:3000`
+        },
+        end_socket_url: (state) => {
+            
+            return state.global.domain.indexOf('www') !== -1
+                ? state.global.domain
+                : `${state.global.domain}:3010`
+        },
         user_id: (state) => state.user_info.user_id,
         user_info: (state) => state.user_info,
         room_No: (state) => state.room_info.room_No,

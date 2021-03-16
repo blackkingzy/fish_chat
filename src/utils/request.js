@@ -45,7 +45,6 @@ service.interceptors.response.use(
      */
     (response) => {
         const res = response.data
-        console.log(res)
 
         // if the custom code is not 200, it is judged as an error.
         if (res.code !== 200) {
@@ -68,7 +67,6 @@ service.interceptors.response.use(
         console.log(error.response)
         const { status } = error.response
         const { url } = error.response.config
-        console.log(url)
         ;['api/isOpenService', 'api/info'].includes(url)
             ? ''
             : errorCallback(status)

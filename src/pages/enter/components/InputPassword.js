@@ -8,7 +8,6 @@ import { isEmpty } from '../../../utils/index.js'
 export default (t, showTip) => {
     let password = ''
     showTip = showTip === false ? showTip : true
-    console.log(showTip)
     return new Promise((resolve, reject) => {
         Modal.confirm({
             title: t('label.enter.L006'),
@@ -21,7 +20,6 @@ export default (t, showTip) => {
                     labelWidth: '6em',
                     oninput: function (e) {
                         password = e.target.value
-                        console.log('input', e.target.value)
                     },
                 }),
                 showTip ? t('message.enter.M004') : '',

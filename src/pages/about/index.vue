@@ -93,16 +93,16 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.details_content >>> .ant-descriptions-title {
+.details_content ::v-deep(.ant-descriptions-title) {
     font-weight: 600;
     color: #ff6666;
 }
-.details_content >>> .ant-descriptions-item-label {
+.details_content ::v-deep(.ant-descriptions-item-label) {
     font-weight: 400;
     color: #0099cc;
 }
 
-.details_content >>> .ant-descriptions-item-content {
+.details_content ::v-deep(.ant-descriptions-item-content) {
     color: #666666;
 }
 </style>

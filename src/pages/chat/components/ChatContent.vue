@@ -55,14 +55,9 @@ export default {
         const msg_list_dom = ref(null);
 
         onMounted(() => {
-            // console.log(chat_scroll.value.scrollTopMax);
-            // console.log(chat_content.value.offsetHeight);
-            // console.log(chat_content.value.offsetHeight);
+
             msg_list_dom.value.scrollIntoView(false);
-            console.log(chat_scroll.value.scrollTop, "mounted");
-            console.log(chat_scroll.value.scrollHeight, "mounted");
             chat_scroll.value.scrollTop = chat_scroll.value.scrollHeight;
-            console.log(chat_scroll.value.scrollTop, "mountedafter");
         });
         const listHeight = computed(() => {
             return `${props.msgList.length * props.itemHeight}px`;
@@ -72,7 +67,6 @@ export default {
         });
 
         const visibleData = computed(() => {
-            console.log("computed");
             //这里未来可以优化
             return props.msgList.slice(
                 startIndex.value,
@@ -84,27 +78,12 @@ export default {
         watch(props.msgList, (newValue, oldValue) => {
             //当添加msg时,始终让滚动条在最下面,注意这里,在代码获取scrollTop时,需要用nextTick
             nextTick(() => {
-                console.log(chat_scroll.value.scrollTop, "watch");
-                console.log(chat_scroll.value.scrollHeight, "watch");
                 chat_scroll.value.scrollTop = chat_scroll.value.scrollHeight;
-                console.log(chat_scroll.value.scrollTop, "watchafter");
             });
         });
 
-        // watchEffect(() => {
-        //     console.log("watchEffect");
-        //     console.log(startIndex.value, endIndex.value);
-        //     visibleData = props.msgList.slice(
-        //         startIndex.value,
-        //         Math.min(endIndex.value, props.msgList.length)
-        //     );
-        //     console.log(visibleData);
-        // });
         const scrollListener = () => {
             //修改scrollTop的值相当于此事件执行了一次
-            console.log("scroll");
-            console.log(chat_scroll.value.scrollTop, "scroll");
-            console.log(chat_scroll.value.scrollHeight, "scroll");
             const scrollTop = chat_scroll.value.scrollTop;
             startIndex.value = Math.floor(
                 chat_scroll.value.scrollTop / props.itemHeight

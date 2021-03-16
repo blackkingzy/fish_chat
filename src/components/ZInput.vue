@@ -47,7 +47,7 @@ export default {
             return {
                 large: props.size && props.size === 'large',
                 medium: props.size && props.size === 'medium',
-                medium: props.size && props.size === 'small',
+                small: props.size && props.size === 'small',
             }
         })
 

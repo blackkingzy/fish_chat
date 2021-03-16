@@ -69,7 +69,6 @@ const whiteList = ['/']
 
 router.beforeEach(async (to, from, next) => {
     //注意:path '/'直接redirect 到'/enter',该beforeEach方法直接略过了匹配path '/',这应该是vue-router的规则
-    console.log(to, from)
 
     //获取token,没有token直接到首页
     //有token,判断是不是刷新，如果是刷新，请求接口去获取用户信息等等
@@ -86,7 +85,6 @@ router.beforeEach(async (to, from, next) => {
             try {
                 //请求重新进入房间的接口
                 const data = await get('api/info')
-                console.log('api/info', data)
                 const params = {
                     user_info: data.user_info,
                     room_No: data.room_No,

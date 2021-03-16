@@ -38,7 +38,7 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.select_language >>> .ant-select-selection {
+.select_language ::v-deep(.ant-select-selection) {
     border: none;
 }
 </style>
